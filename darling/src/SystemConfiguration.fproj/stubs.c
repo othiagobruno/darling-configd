@@ -1,3 +1,5 @@
+#include <string.h>
+#include <stdio.h>
 #include <SystemConfiguration/SystemConfiguration.h>
 
 #define STUB() printf("STUB %s\n", __func__)
@@ -163,3 +165,40 @@ CFStringRef SCDynamicStoreKeyCreateNetworkInterfaceEntity(CFAllocatorRef allocat
 	STUB();
 	return NULL;
 };
+
+CFStringRef SCDynamicStoreKeyCreateProxies(CFAllocatorRef allocator)
+{
+	return CFStringCreateWithFormat(allocator, NULL, CFSTR("%@:/%@/%@/%@"),
+					kSCDynamicStoreDomainState, kSCCompNetwork, kSCCompGlobal, kSCEntNetProxies);
+}
+
+const char *SCErrorString(int status)
+{
+	switch (status) {
+		case kSCStatusOK:			return "Success!";
+		case kSCStatusFailed:			return "Failed!";
+		case kSCStatusInvalidArgument:		return "Invalid argument";
+		case kSCStatusAccessError:		return "Permission denied (must be root to perform this operation)";
+		case kSCStatusNoKey:			return "No such key";
+		case kSCStatusKeyExists:		return "Key already defined";
+		case kSCStatusLocked:			return "Lock already held";
+		case kSCStatusNeedLock:			return "Lock required for this operation";
+		case kSCStatusNoStoreSession:		return "Configuration daemon session not active";
+		case kSCStatusNoStoreServer:		return "Configuration daemon not (no longer) available";
+		case kSCStatusNotifierActive:		return "Notifier is currently active";
+		case kSCStatusNoPrefsSession:		return "Preference session not active";
+		case kSCStatusPrefsBusy:		return "Preferences update currently in progress";
+		case kSCStatusNoConfigFile:		return "Configuration file not found";
+		case kSCStatusNoLink:			return "No such link";
+		case kSCStatusStale:			return "Write attempted on stale version of object";
+		case kSCStatusMaxLink:			return "Maximum link count exceeded";
+		case kSCStatusReachabilityUnknown:	return "Network reachability cannot be determined";
+		case kSCStatusConnectionNoService:	return "Network service for connection not available";
+		case kSCStatusConnectionIgnore:		return "Network connection information not available at this time";
+		default:
+			// Values in the range of errno are reported using the C library's text.
+			if (status > 0 && status < 1000)
+				return strerror(status);
+			return "(unknown status)";
+	}
+}
