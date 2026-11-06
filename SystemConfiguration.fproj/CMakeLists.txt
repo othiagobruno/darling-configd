@@ -25,6 +25,7 @@ mig(helper/helper.defs)
 
 set(sc_sources
 	../darling/src/SystemConfiguration.fproj/stubs.c
+	../darling/src/SystemConfiguration.fproj/dynamic_store.c
 	../darling/src/SystemConfiguration.fproj/stubs.cpp
 	#helper/SCHelper_client.c
 	#BondConfiguration.c

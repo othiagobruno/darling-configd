@@ -102,27 +102,12 @@ SCNetworkReachabilityRef SCNetworkReachabilityCreateWithAddress(CFAllocatorRef a
 
 CFStringRef SCDynamicStoreKeyCreateNetworkGlobalEntity(CFAllocatorRef allocator, CFStringRef domain, CFStringRef entity)
 {
-	STUB();
-	return NULL;
+	// the domain constants already carry their trailing colon (e.g. "State:")
+	return CFStringCreateWithFormat(allocator, NULL, CFSTR("%@/%@/%@/%@"), domain, kSCCompNetwork, kSCCompGlobal, entity);
 }
 
-CFPropertyListRef SCDynamicStoreCopyValue(SCDynamicStoreRef store, CFStringRef key)
-{
-	STUB();
-	return NULL;
-}
 
-SCDynamicStoreRef SCDynamicStoreCreate(CFAllocatorRef allocator, CFStringRef name, SCDynamicStoreCallBack callout, SCDynamicStoreContext *context)
-{
-	STUB();
-	return NULL;
-}
 
-SCDynamicStoreRef __nullable SCDynamicStoreCreateWithOptions(CFAllocatorRef __nullable allocator, CFStringRef name, CFDictionaryRef __nullable storeOptions, SCDynamicStoreCallBack __nullable callout, SCDynamicStoreContext* __nullable context)
-{
-    STUB();
-	return NULL;
-};
 
 CFStringRef SCDynamicStoreKeyCreate(CFAllocatorRef allocator, CFStringRef fmt, ...)
 {
@@ -130,16 +115,7 @@ CFStringRef SCDynamicStoreKeyCreate(CFAllocatorRef allocator, CFStringRef fmt, .
 	return NULL;
 }
 
-Boolean SCDynamicStoreSetDispatchQueue(SCDynamicStoreRef store, dispatch_queue_t queue)
-{
-	STUB();
-	return FALSE;
-}
 
-Boolean SCDynamicStoreSetNotificationKeys(SCDynamicStoreRef store, CFArrayRef __nullable keys, CFArrayRef __nullable patterns) {
-	STUB();
-	return FALSE;
-}
 
 CFStringRef SCDynamicStoreKeyCreateComputerName(CFAllocatorRef allocator) {
 	STUB();
@@ -168,8 +144,7 @@ CFStringRef SCDynamicStoreKeyCreateNetworkInterfaceEntity(CFAllocatorRef allocat
 
 CFStringRef SCDynamicStoreKeyCreateProxies(CFAllocatorRef allocator)
 {
-	return CFStringCreateWithFormat(allocator, NULL, CFSTR("%@:/%@/%@/%@"),
-					kSCDynamicStoreDomainState, kSCCompNetwork, kSCCompGlobal, kSCEntNetProxies);
+	return SCDynamicStoreKeyCreateNetworkGlobalEntity(allocator, kSCDynamicStoreDomainState, kSCEntNetProxies);
 }
 
 const char *SCErrorString(int status)
